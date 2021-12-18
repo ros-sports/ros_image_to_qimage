@@ -40,6 +40,7 @@ ament_export_libraries(
 )
 ament_export_dependencies(Qt5Widgets)
 ament_export_dependencies(sensor_msgs)
+ament_export_dependencies(cv_bridge)
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
