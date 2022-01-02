@@ -35,12 +35,11 @@ QImage Convert(const sensor_msgs::msg::Image::ConstSharedPtr msg)
     return QImage{};
   }
 
-  // image must be copied since it uses the conversion_mat_ for storage which is asynchronously
-  // overwritten in the next callback invocation
-  QImage image(conversion_mat_.data, conversion_mat_.cols, conversion_mat_.rows,
-    conversion_mat_.step[0], QImage::Format_RGB888);
-
-  return image;
+  // construct a temporary qimage which doesn't perform a deep copy of the image bytes,
+  // then explicitly call copy(), such that a deep copy is performed.
+  return QImage(
+    conversion_mat_.data, conversion_mat_.cols, conversion_mat_.rows,
+    conversion_mat_.step[0], QImage::Format_RGB888).copy();
 }
 
 }  // namespace ros_image_to_qimage
