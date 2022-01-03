@@ -21,7 +21,7 @@
 namespace ros_image_to_qimage
 {
 
-QImage Convert(const sensor_msgs::msg::Image::ConstSharedPtr msg);
+QImage Convert(const sensor_msgs::msg::Image & msg);
 
 }  // namespace ros_image_to_qimage
 

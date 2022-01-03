@@ -18,20 +18,20 @@
 namespace ros_image_to_qimage
 {
 
-QImage Convert(const sensor_msgs::msg::Image::ConstSharedPtr msg)
+QImage Convert(const sensor_msgs::msg::Image & msg)
 {
   cv::Mat conversion_mat_;
 
   try {
     // Convert image from ros to cv type
     cv_bridge::CvImageConstPtr cv_ptr =
-      cv_bridge::toCvShare(msg, sensor_msgs::image_encodings::RGB8);
+      cv_bridge::toCvCopy(msg, sensor_msgs::image_encodings::RGB8);
     conversion_mat_ = cv_ptr->image;
   } catch (cv_bridge::Exception & e) {
     qWarning(
       "ImageView.callback_image() while trying to convert image from '%s' to 'rgb8' an "
       "exception was thrown (%s)",
-      msg->encoding.c_str(), e.what());
+      msg.encoding.c_str(), e.what());
     return QImage{};
   }
 
