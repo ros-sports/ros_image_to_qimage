@@ -3,9 +3,9 @@
 <package format="3">
   <name>ros_image_to_qimage</name>
   <version>0.0.1</version>
-  <description>TODO: Package description</description>
+  <description>A package that converts a ros image msg to a qimage object</description>
   <maintainer email="kenjibrameld@gmail.com">ijnek</maintainer>
-  <license>TODO: License declaration</license>
+  <license>Apache License 2.0</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 
