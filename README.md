@@ -1,10 +1,38 @@
 # ros_image_to_qimage
 
-[![Build and Test (foxy)](../../actions/workflows/build_and_test_foxy.yaml/badge.svg)](../../actions/workflows/build_and_test_foxy.yaml)
-[![Build and Test (galactic)](../../actions/workflows/build_and_test_galactic.yaml/badge.svg)](../../actions/workflows/build_and_test_galactic.yaml)
-[![Build and Test (rolling)](../../actions/workflows/build_and_test_rolling.yaml/badge.svg)](../../actions/workflows/build_and_test_rolling.yaml)
+[![Build and Test (foxy)](https://github.com/ros-sports/ros_image_to_qimage/actions/workflows/build_and_test_foxy.yaml/badge.svg?branch=foxy)](https://github.com/ros-sports/ros_image_to_qimage/actions/workflows/build_and_test_foxy.yaml?query=branch:foxy)
+[![Build and Test (galactic)](https://github.com/ros-sports/ros_image_to_qimage/actions/workflows/build_and_test_galactic.yaml/badge.svg?branch=galactic)](https://github.com/ros-sports/ros_image_to_qimage/actions/workflows/build_and_test_galactic.yaml?query=branch:galactic)
+[![Build and Test (humble)](https://github.com/ros-sports/ros_image_to_qimage/actions/workflows/build_and_test_humble.yaml/badge.svg?branch=humble)](https://github.com/ros-sports/ros_image_to_qimage/actions/workflows/build_and_test_humble.yaml?query=branch:humble)
+[![Build and Test (rolling)](https://github.com/ros-sports/ros_image_to_qimage/actions/workflows/build_and_test_rolling.yaml/badge.svg?branch=rolling)](https://github.com/ros-sports/ros_image_to_qimage/actions/workflows/build_and_test_rolling.yaml?query=branch:rolling)
 
 Converts a ROS2 `sensor_msgs/msg/Image` to QImage.
+
+# Installation
+
+### ROS2 Galactic / Humble / Rolling
+
+Binary installation is available. Source your ROS installation, then run:
+
+```
+sudo apt install ros-${ROS_DISTRO}-ros-image-to-qimage
+```
+
+Alternatively to build from source, source your ROS installation, then run the following in your ROS workspace:
+
+```
+git clone https://github.com/ros-sports/soccer_interfaces.git src/soccer_interfaces --branch ${ROS_DISTRO}
+colcon build
+```
+
+### ROS2 Foxy
+
+Only source installation is available. Source your ROS installation, then run the following in your ROS workspace:
+
+```
+git clone https://github.com/ros-sports/soccer_interfaces.git src/soccer_interfaces --branch ${ROS_DISTRO}
+colcon build
+```
+
 
 # Usage
 
@@ -27,4 +55,3 @@ For your CMakeLists.txt, suppose we want to link `my_target` against this librar
 find_package(ros_image_to_qimage REQUIRED)
 ament_target_dependencies(my_target ros_image_to_qimage)
 ```
-
