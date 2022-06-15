@@ -2,6 +2,12 @@
 Changelog for package ros_image_to_qimage
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* update readme
+* update ci
+* Contributors: Kenji Brameld
+
 0.0.2 (2022-01-07)
 ------------------
 * fill package.xml with correct description and license tag
