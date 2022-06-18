@@ -21,7 +21,7 @@ def test_convert():
     msg = Image(
         height=480,
         width=640,
-        encoding="rgb8",
+        encoding='rgb8',
         is_bigendian=0,
         step=1920,
         data=[0]*1920*480,
