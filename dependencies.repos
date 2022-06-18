@@ -1,5 +1,0 @@
-repositories:
-  vision_opencv:
-    type: git
-    url: https://github.com/ijnek/vision_opencv.git
-    version: ijnek-cv2-dependency
