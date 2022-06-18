@@ -14,7 +14,6 @@
   <depend>sensor_msgs</depend>
   <depend>qtbase5-dev</depend>
   <depend>cv_bridge</depend>
-  <depend>python3-opencv</depend>
 
   <exec_depend>python_qt_binding</exec_depend>
 
