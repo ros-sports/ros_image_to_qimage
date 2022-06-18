@@ -7,9 +7,12 @@ endif()
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
+find_package(ament_cmake_python REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(Qt5Widgets REQUIRED)
 find_package(cv_bridge REQUIRED)
+find_package(python_qt_binding REQUIRED)
+find_package(ament_cmake_pytest REQUIRED)
 
 add_library(ros_image_to_qimage src/ros_image_to_qimage.cpp)
 target_include_directories(ros_image_to_qimage PUBLIC
@@ -31,6 +34,7 @@ install(
   LIBRARY DESTINATION lib
   RUNTIME DESTINATION bin
 )
+ament_python_install_package(${PROJECT_NAME})
 
 ament_export_include_directories(
   include
@@ -41,10 +45,13 @@ ament_export_libraries(
 ament_export_dependencies(Qt5Widgets)
 ament_export_dependencies(sensor_msgs)
 ament_export_dependencies(cv_bridge)
+ament_export_dependencies(python_qt_binding)
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
   ament_lint_auto_find_test_dependencies()
+
+  ament_add_pytest_test(test_ros_image_to_qimage test/test_ros_image_to_qimage.py)
 endif()
 
 ament_package()
