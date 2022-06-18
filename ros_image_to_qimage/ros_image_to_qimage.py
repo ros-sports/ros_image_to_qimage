@@ -12,9 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from sensor_msgs.msg import Image
-from python_qt_binding.QtGui import QImage
 from cv_bridge import CvBridge, CvBridgeError
+
+from python_qt_binding.QtGui import QImage
+
+from sensor_msgs.msg import Image
 
 cv_bridge = CvBridge()
 
@@ -22,7 +24,7 @@ cv_bridge = CvBridge()
 def convert(msg: Image) -> QImage:
 
     try:
-        cv_image = cv_bridge.imgmsg_to_cv2(msg, "rgb8")
+        cv_image = cv_bridge.imgmsg_to_cv2(msg, 'rgb8')
         height, width, _ = cv_image.shape
         bytesPerLine = 3 * width
         return QImage(cv_image.data, width, height, bytesPerLine,
