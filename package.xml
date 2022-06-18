@@ -8,10 +8,14 @@
   <license>Apache License 2.0</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
+  <buildtool_depend>ament_cmake_python</buildtool_depend>
+  <buildtool_depend>ament_cmake_pytest</buildtool_depend>
 
   <depend>sensor_msgs</depend>
   <depend>qtbase5-dev</depend>
   <depend>cv_bridge</depend>
+
+  <exec_depend>python_qt_binding</exec_depend>
 
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>
