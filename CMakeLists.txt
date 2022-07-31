@@ -48,10 +48,11 @@ ament_export_dependencies(cv_bridge)
 ament_export_dependencies(python_qt_binding)
 
 if(BUILD_TESTING)
+  find_package(ament_cmake_gtest REQUIRED)
+  add_subdirectory(test)
+
   find_package(ament_lint_auto REQUIRED)
   ament_lint_auto_find_test_dependencies()
-
-  ament_add_pytest_test(test_ros_image_to_qimage test/test_ros_image_to_qimage.py)
 endif()
 
 ament_package()

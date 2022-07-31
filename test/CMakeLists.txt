@@ -1,0 +1,6 @@
+# C++
+ament_add_gtest(test_ros_image_to_qimage_cpp test_ros_image_to_qimage.cpp)
+target_link_libraries(test_ros_image_to_qimage_cpp ros_image_to_qimage)
+
+# Python
+ament_add_pytest_test(test_ros_image_to_qimage_py test_ros_image_to_qimage.py)
