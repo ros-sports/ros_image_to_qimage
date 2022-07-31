@@ -23,8 +23,8 @@ def test_convert():
         width=640,
         encoding='rgb8',
         is_bigendian=0,
-        step=1920,
-        data=[0]*1920*480,
+        step=640*3,
+        data=[0]*640*480*3,
     )
     q_image = ros_image_to_qimage.convert(msg)
     assert q_image is not None
