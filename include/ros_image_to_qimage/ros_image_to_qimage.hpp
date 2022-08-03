@@ -16,12 +16,15 @@
 #define ROS_IMAGE_TO_QIMAGE__ROS_IMAGE_TO_QIMAGE_HPP_
 
 #include <QImage>
+#include "cv_bridge/cv_bridge.h"
 #include "sensor_msgs/msg/image.hpp"
 
 namespace ros_image_to_qimage
 {
 
-QImage Convert(const sensor_msgs::msg::Image & msg);
+QImage Convert(
+  const sensor_msgs::msg::Image & msg,
+  const cv_bridge::CvtColorForDisplayOptions & options = cv_bridge::CvtColorForDisplayOptions());
 
 }  // namespace ros_image_to_qimage
 

@@ -18,22 +18,17 @@
 namespace ros_image_to_qimage
 {
 
-QImage Convert(const sensor_msgs::msg::Image & msg)
+QImage Convert(
+  const sensor_msgs::msg::Image & msg,
+  const cv_bridge::CvtColorForDisplayOptions & options)
 {
-  cv::Mat conversion_mat_;
+  cv_bridge::CvImageConstPtr cv_ptr = cv_bridge::toCvCopy(msg);
 
-  try {
-    // Convert image from ros to cv type
-    cv_bridge::CvImageConstPtr cv_ptr =
-      cv_bridge::toCvCopy(msg, sensor_msgs::image_encodings::RGB8);
-    conversion_mat_ = cv_ptr->image;
-  } catch (cv_bridge::Exception & e) {
-    qWarning(
-      "ImageView.callback_image() while trying to convert image from '%s' to 'rgb8' an "
-      "exception was thrown (%s)",
-      msg.encoding.c_str(), e.what());
-    return QImage{};
+  if (sensor_msgs::image_encodings::numChannels(msg.encoding) == 1) {
+    cv_ptr = cv_bridge::cvtColorForDisplay(cv_ptr, "", options);
   }
+
+  cv::Mat conversion_mat_ = cv_ptr->image;
 
   // construct a temporary qimage which doesn't perform a deep copy of the image bytes,
   // then explicitly call copy(), such that a deep copy is performed.
