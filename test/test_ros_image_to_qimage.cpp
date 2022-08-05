@@ -42,10 +42,8 @@ TEST(TestRosImageToQImage, TestOptions)
   msg.step = 640 * 4;
   msg.data.resize(640 * 480 * 4, 0);
 
-  for (unsigned x = 0; x < 480; ++x)
-  {
-    for (unsigned y = 0; y < 640; ++y)
-    {
+  for (unsigned x = 0; x < 480; ++x) {
+    for (unsigned y = 0; y < 640; ++y) {
       msg.data[(x * 640 + y) * 4 + 0] = x + y;
     }
   }
