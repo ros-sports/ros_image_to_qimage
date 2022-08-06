@@ -92,9 +92,68 @@ TEST(TestRosImageToQimage, TestSimple)
     msg.step = msg.width * channels * bitDepth;
     msg.data.resize(width * height * channels * bitDepth, 0);
 
-    auto qImage = ros_image_to_qimage::Convert(msg);
-    ASSERT_EQ(qImage.width(), width);
-    ASSERT_EQ(qImage.height(), height);
-    ASSERT_EQ(qImage.format(), QImage::Format_RGB888);
+    QImage qImage;
+    EXPECT_NO_THROW(qImage = ros_image_to_qimage::Convert(msg));
+    EXPECT_EQ(qImage.width(), width);
+    EXPECT_EQ(qImage.height(), height);
+    EXPECT_EQ(qImage.format(), QImage::Format_RGB888);
   }
 }
+
+
+TEST(TestRosImageToQimage, TestCvTypes)
+{
+  std::vector<std::string> encodings = {
+    sensor_msgs::image_encodings::TYPE_8UC1,
+    sensor_msgs::image_encodings::TYPE_8UC2,
+    sensor_msgs::image_encodings::TYPE_8UC3,
+    sensor_msgs::image_encodings::TYPE_8UC4,
+    sensor_msgs::image_encodings::TYPE_8SC1,
+    sensor_msgs::image_encodings::TYPE_8SC2,
+    sensor_msgs::image_encodings::TYPE_8SC3,
+    sensor_msgs::image_encodings::TYPE_8SC4,
+    sensor_msgs::image_encodings::TYPE_16UC1,
+    sensor_msgs::image_encodings::TYPE_16UC2,
+    sensor_msgs::image_encodings::TYPE_16UC3,
+    sensor_msgs::image_encodings::TYPE_16UC4,
+    sensor_msgs::image_encodings::TYPE_16SC1,
+    sensor_msgs::image_encodings::TYPE_16SC2,
+    sensor_msgs::image_encodings::TYPE_16SC3,
+    sensor_msgs::image_encodings::TYPE_16SC4,
+    sensor_msgs::image_encodings::TYPE_32SC1,
+    sensor_msgs::image_encodings::TYPE_32SC2,
+    sensor_msgs::image_encodings::TYPE_32SC3,
+    sensor_msgs::image_encodings::TYPE_32SC4,
+    sensor_msgs::image_encodings::TYPE_32FC1,
+    sensor_msgs::image_encodings::TYPE_32FC2,
+    sensor_msgs::image_encodings::TYPE_32FC3,
+    sensor_msgs::image_encodings::TYPE_32FC4,
+    sensor_msgs::image_encodings::TYPE_64FC1,
+    sensor_msgs::image_encodings::TYPE_64FC2,
+    sensor_msgs::image_encodings::TYPE_64FC3,
+    sensor_msgs::image_encodings::TYPE_64FC4,
+  };
+
+  for (const auto & encoding : encodings)
+  {
+    int height = 2;
+    int width = 3;
+    int channels = sensor_msgs::image_encodings::numChannels(encoding);
+    int bitDepth = sensor_msgs::image_encodings::bitDepth(encoding);
+
+    sensor_msgs::msg::Image msg;
+    msg.height = height;
+    msg.width = width;
+    msg.encoding = encoding;
+    msg.is_bigendian = false;
+    msg.step = msg.width * channels * bitDepth;
+    msg.data.resize(width * height * channels * bitDepth, 0);
+
+    QImage qImage;
+    EXPECT_NO_THROW(qImage = ros_image_to_qimage::Convert(msg));
+    EXPECT_EQ(qImage.width(), width);
+    EXPECT_EQ(qImage.height(), height);
+    EXPECT_EQ(qImage.format(), QImage::Format_RGB888);
+  }
+}
+
