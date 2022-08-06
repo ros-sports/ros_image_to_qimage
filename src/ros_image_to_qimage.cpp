@@ -25,6 +25,9 @@ QImage Convert(
   cv_bridge::CvImageConstPtr cv_ptr = cv_bridge::toCvCopy(msg);
 
   if (sensor_msgs::image_encodings::numChannels(msg.encoding) == 1) {
+    cv_bridge::CvtColorForDisplayOptions options;
+    options.min_image_value = 0.0;
+    options.max_image_value = 10.0;
     cv_ptr = cv_bridge::cvtColorForDisplay(cv_ptr, "", options);
   }
 
