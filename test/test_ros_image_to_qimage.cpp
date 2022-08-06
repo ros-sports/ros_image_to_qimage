@@ -16,69 +16,65 @@
 #include "ros_image_to_qimage/ros_image_to_qimage.hpp"
 #include "sensor_msgs/image_encodings.hpp"
 
-TEST(TestRosImageToQImage, TestConvertRGB8)
+std::vector<std::string> supportedEncodings = {
+  sensor_msgs::image_encodings::RGB8,
+  sensor_msgs::image_encodings::RGBA8,
+  sensor_msgs::image_encodings::RGB16,
+  sensor_msgs::image_encodings::RGBA16,
+  sensor_msgs::image_encodings::BGR8,
+  sensor_msgs::image_encodings::BGRA8,
+  sensor_msgs::image_encodings::BGR16,
+  sensor_msgs::image_encodings::BGRA16,
+  sensor_msgs::image_encodings::MONO8,
+  sensor_msgs::image_encodings::MONO16,
+  sensor_msgs::image_encodings::TYPE_8UC1,
+  sensor_msgs::image_encodings::TYPE_8UC3,
+  sensor_msgs::image_encodings::TYPE_8UC4,
+  sensor_msgs::image_encodings::TYPE_8SC1,
+  sensor_msgs::image_encodings::TYPE_8SC3,
+  sensor_msgs::image_encodings::TYPE_8SC4,
+  sensor_msgs::image_encodings::TYPE_16UC1,
+  sensor_msgs::image_encodings::TYPE_16UC3,
+  sensor_msgs::image_encodings::TYPE_16UC4,
+  sensor_msgs::image_encodings::TYPE_16SC1,
+  sensor_msgs::image_encodings::TYPE_16SC3,
+  sensor_msgs::image_encodings::TYPE_16SC4,
+  sensor_msgs::image_encodings::TYPE_32SC1,
+  sensor_msgs::image_encodings::TYPE_32SC3,
+  sensor_msgs::image_encodings::TYPE_32SC4,
+  sensor_msgs::image_encodings::TYPE_32FC1,
+  sensor_msgs::image_encodings::TYPE_32FC3,
+  sensor_msgs::image_encodings::TYPE_32FC4,
+  sensor_msgs::image_encodings::TYPE_64FC1,
+  sensor_msgs::image_encodings::TYPE_64FC3,
+  sensor_msgs::image_encodings::TYPE_64FC4,
+  sensor_msgs::image_encodings::BAYER_RGGB8,
+  sensor_msgs::image_encodings::BAYER_BGGR8,
+  sensor_msgs::image_encodings::BAYER_GBRG8,
+  sensor_msgs::image_encodings::BAYER_GRBG8,
+  sensor_msgs::image_encodings::BAYER_RGGB16,
+  sensor_msgs::image_encodings::BAYER_BGGR16,
+  sensor_msgs::image_encodings::BAYER_GBRG16,
+  sensor_msgs::image_encodings::BAYER_GRBG16,
+};
+
+std::vector<std::string> unsupportedEncodings = {
+  sensor_msgs::image_encodings::TYPE_8UC2,
+  sensor_msgs::image_encodings::TYPE_8SC2,
+  sensor_msgs::image_encodings::TYPE_16UC2,
+  sensor_msgs::image_encodings::TYPE_16SC2,
+  sensor_msgs::image_encodings::TYPE_32SC2,
+  sensor_msgs::image_encodings::TYPE_32FC2,
+  sensor_msgs::image_encodings::TYPE_64FC2,
+  sensor_msgs::image_encodings::YUV422,
+  sensor_msgs::image_encodings::YUV422_YUY2,
+  sensor_msgs::image_encodings::NV21,
+  sensor_msgs::image_encodings::NV24,
+};
+
+TEST(TestRosImageToQImage, TestConvertSupportedEncodings)
 {
-  sensor_msgs::msg::Image msg;
-  msg.height = 480;
-  msg.width = 640;
-  msg.encoding = sensor_msgs::image_encodings::RGB8;
-  msg.is_bigendian = false;
-  msg.step = 640 * 3;
-  msg.data.resize(640 * 480 * 3, 0);
-
-  auto qImage = ros_image_to_qimage::Convert(msg);
-  ASSERT_EQ(qImage.width(), 640);
-  ASSERT_EQ(qImage.height(), 480);
-  ASSERT_EQ(qImage.format(), QImage::Format_RGB888);
-}
-
-// TEST(TestRosImageToQImage, TestOptions)
-// {
-//   sensor_msgs::msg::Image msg;
-//   int height = 2;
-//   int width = 3;
-//   msg.height = height;
-//   msg.width = width;
-//   msg.encoding = sensor_msgs::image_encodings::TYPE_32FC1;
-//   msg.is_bigendian = false;
-//   msg.step = width * 4;
-//   msg.data.resize(width * height * 4, 0);
-//   msg.data = []
-
-//   for (unsigned x = 0; x < height; ++x) {
-//     for (unsigned y = 0; y < width; ++y) {
-//       msg.data[(x * width + y) * 4 + 0] = x + y;
-//     }
-//   }
-
-//   cv_bridge::CvtColorForDisplayOptions options;
-//   options.min_image_value = 0.0;
-//   options.max_image_value = 10.0;
-//   auto qImage = ros_image_to_qimage::Convert(msg, options);
-
-//   ASSERT_EQ(qImage.width(), width);
-//   ASSERT_EQ(qImage.height(), height);
-//   ASSERT_EQ(qImage.format(), QImage::Format_RGB888);
-// }
-
-
-TEST(TestRosImageToQimage, TestSimple)
-{
-  std::vector<std::string> encodings = {
-    sensor_msgs::image_encodings::RGB8,
-    sensor_msgs::image_encodings::RGBA8,
-    sensor_msgs::image_encodings::RGB16,
-    sensor_msgs::image_encodings::RGBA16,
-    sensor_msgs::image_encodings::BGR8,
-    sensor_msgs::image_encodings::BGRA8,
-    sensor_msgs::image_encodings::BGR16,
-    sensor_msgs::image_encodings::BGRA16,
-    sensor_msgs::image_encodings::MONO8,
-    sensor_msgs::image_encodings::MONO16,
-  };
-
-  for (const auto & encoding : encodings)
-  {
+  for (const auto & encoding : supportedEncodings) {
     int height = 2;
     int width = 3;
     int channels = sensor_msgs::image_encodings::numChannels(encoding);
@@ -92,50 +88,21 @@ TEST(TestRosImageToQimage, TestSimple)
     msg.step = msg.width * channels * bitDepth;
     msg.data.resize(width * height * channels * bitDepth, 0);
 
+    cv_bridge::CvtColorForDisplayOptions options;
+    options.do_dynamic_scaling = true;
+
+    // std::cout << "encoding: " << encoding << std::endl;
     QImage qImage;
-    EXPECT_NO_THROW(qImage = ros_image_to_qimage::Convert(msg));
+    EXPECT_NO_THROW(qImage = ros_image_to_qimage::Convert(msg, options)) << "Test failure with encoding: " << encoding;
     EXPECT_EQ(qImage.width(), width);
     EXPECT_EQ(qImage.height(), height);
     EXPECT_EQ(qImage.format(), QImage::Format_RGB888);
   }
 }
 
-
-TEST(TestRosImageToQimage, TestCvTypes)
+TEST(TestRosImageToQImage, TestConvertUnsupportedEncodings)
 {
-  std::vector<std::string> encodings = {
-    sensor_msgs::image_encodings::TYPE_8UC1,
-    sensor_msgs::image_encodings::TYPE_8UC2,
-    sensor_msgs::image_encodings::TYPE_8UC3,
-    sensor_msgs::image_encodings::TYPE_8UC4,
-    sensor_msgs::image_encodings::TYPE_8SC1,
-    sensor_msgs::image_encodings::TYPE_8SC2,
-    sensor_msgs::image_encodings::TYPE_8SC3,
-    sensor_msgs::image_encodings::TYPE_8SC4,
-    sensor_msgs::image_encodings::TYPE_16UC1,
-    sensor_msgs::image_encodings::TYPE_16UC2,
-    sensor_msgs::image_encodings::TYPE_16UC3,
-    sensor_msgs::image_encodings::TYPE_16UC4,
-    sensor_msgs::image_encodings::TYPE_16SC1,
-    sensor_msgs::image_encodings::TYPE_16SC2,
-    sensor_msgs::image_encodings::TYPE_16SC3,
-    sensor_msgs::image_encodings::TYPE_16SC4,
-    sensor_msgs::image_encodings::TYPE_32SC1,
-    sensor_msgs::image_encodings::TYPE_32SC2,
-    sensor_msgs::image_encodings::TYPE_32SC3,
-    sensor_msgs::image_encodings::TYPE_32SC4,
-    sensor_msgs::image_encodings::TYPE_32FC1,
-    sensor_msgs::image_encodings::TYPE_32FC2,
-    sensor_msgs::image_encodings::TYPE_32FC3,
-    sensor_msgs::image_encodings::TYPE_32FC4,
-    sensor_msgs::image_encodings::TYPE_64FC1,
-    sensor_msgs::image_encodings::TYPE_64FC2,
-    sensor_msgs::image_encodings::TYPE_64FC3,
-    sensor_msgs::image_encodings::TYPE_64FC4,
-  };
-
-  for (const auto & encoding : encodings)
-  {
+  for (const auto & encoding : unsupportedEncodings) {
     int height = 2;
     int width = 3;
     int channels = sensor_msgs::image_encodings::numChannels(encoding);
@@ -149,11 +116,23 @@ TEST(TestRosImageToQimage, TestCvTypes)
     msg.step = msg.width * channels * bitDepth;
     msg.data.resize(width * height * channels * bitDepth, 0);
 
-    QImage qImage;
-    EXPECT_NO_THROW(qImage = ros_image_to_qimage::Convert(msg));
-    EXPECT_EQ(qImage.width(), width);
-    EXPECT_EQ(qImage.height(), height);
-    EXPECT_EQ(qImage.format(), QImage::Format_RGB888);
+    cv_bridge::CvtColorForDisplayOptions options;
+    options.do_dynamic_scaling = true;
+
+    EXPECT_THROW(auto qImage = ros_image_to_qimage::Convert(msg, options), std::runtime_error);
   }
 }
 
+TEST(TestRosImageToQImage, TestIsEncodingSupported_AllEncodings)
+{
+  for (const auto & encoding : supportedEncodings) {
+    EXPECT_TRUE(ros_image_to_qimage::IsEncodingSupported(encoding));
+  }
+
+  for (const auto & encoding : unsupportedEncodings) {
+    EXPECT_FALSE(ros_image_to_qimage::IsEncodingSupported(encoding));
+  }
+
+  // Random non-ROS encoding
+  EXPECT_THROW(ros_image_to_qimage::IsEncodingSupported("bla"), std::runtime_error);
+}

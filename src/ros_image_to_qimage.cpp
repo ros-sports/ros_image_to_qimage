@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#include <iostream>
 #include "ros_image_to_qimage/ros_image_to_qimage.hpp"
 #include "cv_bridge/cv_bridge.h"
 
@@ -22,6 +23,11 @@ QImage Convert(
   const sensor_msgs::msg::Image & msg,
   const cv_bridge::CvtColorForDisplayOptions & options)
 {
+  if (!IsEncodingSupported(msg.encoding)) {
+    throw std::runtime_error(
+            "Conversion from encoding [" + msg.encoding + "] to QImage is not supported.");
+  }
+
   cv_bridge::CvImageConstPtr cv_ptr = cv_bridge::toCvCopy(msg);
 
   if (sensor_msgs::image_encodings::numChannels(msg.encoding) == 1) {
@@ -35,6 +41,25 @@ QImage Convert(
   return QImage(
     conversion_mat_.data, conversion_mat_.cols, conversion_mat_.rows,
     conversion_mat_.step[0], QImage::Format_RGB888).copy();
+}
+
+bool IsEncodingSupported(std::string encoding)
+{
+  // Can't handle 2 channelled images
+  if (sensor_msgs::image_encodings::numChannels(encoding) == 2) {
+    return false;
+  }
+
+  // Can't handle miscellaneous encodings currently
+  if (encoding == sensor_msgs::image_encodings::YUV422 ||
+    encoding == sensor_msgs::image_encodings::YUV422_YUY2 ||
+    encoding == sensor_msgs::image_encodings::NV21 ||
+    encoding == sensor_msgs::image_encodings::NV24)
+  {
+    return false;
+  }
+
+  return true;
 }
 
 }  // namespace ros_image_to_qimage

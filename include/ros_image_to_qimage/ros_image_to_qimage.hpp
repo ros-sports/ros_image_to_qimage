@@ -38,6 +38,14 @@ QImage Convert(
   const sensor_msgs::msg::Image & msg,
   const cv_bridge::CvtColorForDisplayOptions & options = cv_bridge::CvtColorForDisplayOptions());
 
+/**
+ * @brief Returns whether an encoding is supported by this library
+ *
+ * @param encoding The image encoding type
+ * @return true if the encoding is supported, false otherwise
+ */
+bool IsEncodingSupported(std::string encoding);
+
 }  // namespace ros_image_to_qimage
 
 #endif  // ROS_IMAGE_TO_QIMAGE__ROS_IMAGE_TO_QIMAGE_HPP_
