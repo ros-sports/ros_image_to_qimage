@@ -32,27 +32,69 @@ TEST(TestRosImageToQImage, TestConvertRGB8)
   ASSERT_EQ(qImage.format(), QImage::Format_RGB888);
 }
 
-TEST(TestRosImageToQImage, TestOptions)
+// TEST(TestRosImageToQImage, TestOptions)
+// {
+//   sensor_msgs::msg::Image msg;
+//   int height = 2;
+//   int width = 3;
+//   msg.height = height;
+//   msg.width = width;
+//   msg.encoding = sensor_msgs::image_encodings::TYPE_32FC1;
+//   msg.is_bigendian = false;
+//   msg.step = width * 4;
+//   msg.data.resize(width * height * 4, 0);
+//   msg.data = []
+
+//   for (unsigned x = 0; x < height; ++x) {
+//     for (unsigned y = 0; y < width; ++y) {
+//       msg.data[(x * width + y) * 4 + 0] = x + y;
+//     }
+//   }
+
+//   cv_bridge::CvtColorForDisplayOptions options;
+//   options.min_image_value = 0.0;
+//   options.max_image_value = 10.0;
+//   auto qImage = ros_image_to_qimage::Convert(msg, options);
+
+//   ASSERT_EQ(qImage.width(), width);
+//   ASSERT_EQ(qImage.height(), height);
+//   ASSERT_EQ(qImage.format(), QImage::Format_RGB888);
+// }
+
+
+TEST(TestRosImageToQimage, TestSimple)
 {
-  sensor_msgs::msg::Image msg;
-  msg.height = 480;
-  msg.width = 640;
-  msg.encoding = sensor_msgs::image_encodings::TYPE_32FC1;
-  msg.is_bigendian = false;
-  msg.step = 640 * 4;
-  msg.data.resize(640 * 480 * 4, 0);
+  std::vector<std::string> encodings = {
+    sensor_msgs::image_encodings::RGB8,
+    sensor_msgs::image_encodings::RGBA8,
+    sensor_msgs::image_encodings::RGB16,
+    sensor_msgs::image_encodings::RGBA16,
+    sensor_msgs::image_encodings::BGR8,
+    sensor_msgs::image_encodings::BGRA8,
+    sensor_msgs::image_encodings::BGR16,
+    sensor_msgs::image_encodings::BGRA16,
+    sensor_msgs::image_encodings::MONO8,
+    sensor_msgs::image_encodings::MONO16,
+  };
 
-  for (unsigned x = 0; x < 480; ++x) {
-    for (unsigned y = 0; y < 640; ++y) {
-      msg.data[(x * 640 + y) * 4 + 0] = x + y;
-    }
+  for (const auto & encoding : encodings)
+  {
+    int height = 2;
+    int width = 3;
+    int channels = sensor_msgs::image_encodings::numChannels(encoding);
+    int bitDepth = sensor_msgs::image_encodings::bitDepth(encoding);
+
+    sensor_msgs::msg::Image msg;
+    msg.height = height;
+    msg.width = width;
+    msg.encoding = encoding;
+    msg.is_bigendian = false;
+    msg.step = msg.width * channels * bitDepth;
+    msg.data.resize(width * height * channels * bitDepth, 0);
+
+    auto qImage = ros_image_to_qimage::Convert(msg);
+    ASSERT_EQ(qImage.width(), width);
+    ASSERT_EQ(qImage.height(), height);
+    ASSERT_EQ(qImage.format(), QImage::Format_RGB888);
   }
-
-  cv_bridge::CvtColorForDisplayOptions options;
-  options.do_dynamic_scaling = true;
-  auto qImage = ros_image_to_qimage::Convert(msg, options);
-
-  ASSERT_EQ(qImage.width(), 640);
-  ASSERT_EQ(qImage.height(), 480);
-  ASSERT_EQ(qImage.format(), QImage::Format_RGB888);
 }
