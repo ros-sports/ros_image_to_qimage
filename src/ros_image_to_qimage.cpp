@@ -13,19 +13,24 @@
 // limitations under the License.
 
 #include "ros_image_to_qimage/ros_image_to_qimage.hpp"
-#include "cv_bridge/cv_bridge.h"
 
 namespace ros_image_to_qimage
 {
 
-QImage Convert(const sensor_msgs::msg::Image & msg)
+QImage Convert(
+  const sensor_msgs::msg::Image & msg,
+  const cv_bridge::CvtColorForDisplayOptions & options)
 {
   cv::Mat conversion_mat_;
 
   try {
     // Convert image from ros to cv type
-    cv_bridge::CvImageConstPtr cv_ptr =
-      cv_bridge::toCvCopy(msg, sensor_msgs::image_encodings::RGB8);
+    cv_bridge::CvImageConstPtr cv_ptr = cv_bridge::toCvCopy(msg);
+
+    if (sensor_msgs::image_encodings::numChannels(msg.encoding) == 1) {
+      cv_ptr = cv_bridge::cvtColorForDisplay(cv_ptr, "", options);
+    }
+
     conversion_mat_ = cv_ptr->image;
   } catch (cv_bridge::Exception & e) {
     qWarning(
