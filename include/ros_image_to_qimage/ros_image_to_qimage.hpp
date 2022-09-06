@@ -16,12 +16,26 @@
 #define ROS_IMAGE_TO_QIMAGE__ROS_IMAGE_TO_QIMAGE_HPP_
 
 #include <QImage>
+#include "cv_bridge/cv_bridge.h"
 #include "sensor_msgs/msg/image.hpp"
 
 namespace ros_image_to_qimage
 {
 
-QImage Convert(const sensor_msgs::msg::Image & msg);
+/**
+ * @brief Converts a ROS image message to a QImage.
+ * @details Converts ROS image messages of different encodings to QImage. This function calls
+ * cv_bridge::toCvCopy to convert the image to a cv image first. If the cv image is not of type
+ * rgb8, it converts the image to an rgb format using cv_bridge::CvtColorForDisplay with
+ * \p options . The cv image is then converted to a QImage.
+ *
+ * @param msg The ROS image message to convert.
+ * @param options The options to use when converting a single-channeled image (eg. depth images)
+ * @return QImage The QImage representation of the ROS image message.
+ */
+QImage Convert(
+  const sensor_msgs::msg::Image & msg,
+  const cv_bridge::CvtColorForDisplayOptions & options = cv_bridge::CvtColorForDisplayOptions());
 
 }  // namespace ros_image_to_qimage
 

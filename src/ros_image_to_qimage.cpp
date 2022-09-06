@@ -18,14 +18,18 @@
 namespace ros_image_to_qimage
 {
 
-QImage Convert(const sensor_msgs::msg::Image & msg)
+QImage Convert(
+  const sensor_msgs::msg::Image & msg,
+  const cv_bridge::CvtColorForDisplayOptions & options)
 {
   cv::Mat conversion_mat_;
 
   try {
     // Convert image from ros to cv type
-    cv_bridge::CvImageConstPtr cv_ptr =
-      cv_bridge::toCvCopy(msg, sensor_msgs::image_encodings::RGB8);
+    cv_bridge::CvImageConstPtr cv_ptr = cv_bridge::toCvCopy(msg);
+    if (cv_ptr->encoding != sensor_msgs::image_encodings::RGB8) {
+      cv_ptr = cv_bridge::cvtColorForDisplay(cv_ptr, "", options);
+    }
     conversion_mat_ = cv_ptr->image;
   } catch (cv_bridge::Exception & e) {
     qWarning(

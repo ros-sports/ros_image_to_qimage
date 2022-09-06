@@ -15,15 +15,31 @@
 #include "gtest/gtest.h"
 #include "ros_image_to_qimage/ros_image_to_qimage.hpp"
 
-TEST(TestRosImageToQImage, TestConvert)
+TEST(TestRosImageToQImage, TestConvertRGB8)
 {
   sensor_msgs::msg::Image msg;
   msg.height = 480;
   msg.width = 640;
-  msg.encoding = "rgb8";
+  msg.encoding = sensor_msgs::image_encodings::RGB8;
   msg.is_bigendian = false;
   msg.step = 640 * 3;
   msg.data.resize(640 * 480 * 3, 0);
+
+  auto qImage = ros_image_to_qimage::Convert(msg);
+  ASSERT_EQ(qImage.width(), 640);
+  ASSERT_EQ(qImage.height(), 480);
+  ASSERT_EQ(qImage.format(), QImage::Format_RGB888);
+}
+
+TEST(TestRosImageToQImage, TestConvertMONO8)
+{
+  sensor_msgs::msg::Image msg;
+  msg.height = 480;
+  msg.width = 640;
+  msg.encoding = sensor_msgs::image_encodings::MONO8;
+  msg.is_bigendian = false;
+  msg.step = 640;
+  msg.data.resize(640 * 480, 0);
 
   auto qImage = ros_image_to_qimage::Convert(msg);
   ASSERT_EQ(qImage.width(), 640);
