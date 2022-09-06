@@ -25,8 +25,9 @@ namespace ros_image_to_qimage
 /**
  * @brief Converts a ROS image message to a QImage.
  * @details Converts ROS image messages of different encodings to QImage. This function calls
- * cv_bridge::CvtColorForDisplay to convert the image to an rgb format with the specified
- * \p options, which is then converted to a QImage.
+ * cv_bridge::toCvCopy to convert the image to a cv image first. If the cv image is not of type
+ * rgb8, it converts the image to an rgb format using cv_bridge::CvtColorForDisplay with
+ * \p options . The cv image is then converted to a QImage.
  *
  * @param msg The ROS image message to convert.
  * @param options The options to use when converting a single-channeled image (eg. depth images)
