@@ -31,6 +31,24 @@ TEST(TestRosImageToQImage, TestConvertRGB8)
   ASSERT_EQ(qImage.format(), QImage::Format_RGB888);
 }
 
+TEST(TestRosImageToQImage, TestBGR8GetsConvertedToRGB8)
+{
+  sensor_msgs::msg::Image msg;
+  msg.height = 1;
+  msg.width = 1;
+  msg.encoding = sensor_msgs::image_encodings::BGR8;
+  msg.is_bigendian = false;
+  msg.step = 1 * 3;
+  msg.data.resize(1 * 1 * 3, 0);
+  msg.data[0] = 0;  // B
+  msg.data[1] = 1;  // G
+  msg.data[2] = 2;  // R
+
+  auto qImage = ros_image_to_qimage::Convert(msg);
+  ASSERT_EQ(qImage.format(), QImage::Format_RGB888);
+  ASSERT_EQ(qImage.pixel(0, 0), qRgb(2, 1, 0));
+}
+
 TEST(TestRosImageToQImage, TestConvertMONO8)
 {
   sensor_msgs::msg::Image msg;

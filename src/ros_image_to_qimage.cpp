@@ -28,7 +28,7 @@ QImage Convert(
     // Convert image from ros to cv type
     cv_bridge::CvImageConstPtr cv_ptr = cv_bridge::toCvCopy(msg);
     if (cv_ptr->encoding != sensor_msgs::image_encodings::RGB8) {
-      cv_ptr = cv_bridge::cvtColorForDisplay(cv_ptr, "", options);
+      cv_ptr = cv_bridge::cvtColorForDisplay(cv_ptr, sensor_msgs::image_encodings::RGB8, options);
     }
     conversion_mat_ = cv_ptr->image;
   } catch (cv_bridge::Exception & e) {
