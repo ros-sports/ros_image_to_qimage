@@ -11,11 +11,10 @@
   <buildtool_depend>ament_cmake_python</buildtool_depend>
   <buildtool_depend>ament_cmake_pytest</buildtool_depend>
 
-  <depend>sensor_msgs</depend>
-  <depend>qtbase5-dev</depend>
   <depend>cv_bridge</depend>
-
-  <exec_depend>python_qt_binding</exec_depend>
+  <depend>python_qt_binding</depend>
+  <depend>qtbase5-dev</depend>
+  <depend>sensor_msgs</depend>
 
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>
