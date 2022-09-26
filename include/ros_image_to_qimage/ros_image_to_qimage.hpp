@@ -16,7 +16,7 @@
 #define ROS_IMAGE_TO_QIMAGE__ROS_IMAGE_TO_QIMAGE_HPP_
 
 #include <QImage>
-#include "cv_bridge/cv_bridge.h"
+#include "cv_bridge/cv_bridge.hpp"
 #include "sensor_msgs/msg/image.hpp"
 
 namespace ros_image_to_qimage
