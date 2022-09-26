@@ -13,7 +13,6 @@
 // limitations under the License.
 
 #include "ros_image_to_qimage/ros_image_to_qimage.hpp"
-#include "cv_bridge/cv_bridge.hpp"
 
 namespace ros_image_to_qimage
 {
