@@ -2,8 +2,8 @@
 Changelog for package ros_image_to_qimage
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.4.0 (2022-09-26)
+------------------
 * Ensure bgr8 gets converted to rgb8 (`#21 <https://github.com/ros-sports/ros_image_to_qimage/issues/21>`_)
 * Add functionality to convert mono colors too (`#18 <https://github.com/ros-sports/ros_image_to_qimage/issues/18>`_)
 * Add tests for cpp (`#13 <https://github.com/ros-sports/ros_image_to_qimage/issues/13>`_)
