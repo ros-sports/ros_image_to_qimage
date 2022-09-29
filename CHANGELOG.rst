@@ -2,8 +2,8 @@
 Changelog for package ros_image_to_qimage
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.4.1 (2022-09-29)
+------------------
 * Change #include cv_bridge.h to cv_bridge.hpp in ros_image_to_qimage.hpp (`#27 <https://github.com/ros-sports/ros_image_to_qimage/issues/27>`_, `#28 <https://github.com/ros-sports/ros_image_to_qimage/issues/28>`_)
 * Change python_qt_binding from exec_depend to depend, because it is being used in CMakeLists.txt. (`#25 <https://github.com/ros-sports/ros_image_to_qimage/issues/25>`_)
 * Contributors: Kenji Brameld
