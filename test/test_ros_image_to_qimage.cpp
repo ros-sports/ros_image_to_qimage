@@ -64,3 +64,18 @@ TEST(TestRosImageToQImage, TestConvertMONO8)
   ASSERT_EQ(qImage.height(), 480);
   ASSERT_EQ(qImage.format(), QImage::Format_RGB888);
 }
+
+TEST(TestRosImageToQImage, TestCatchCvBridgeException)
+{
+  sensor_msgs::msg::Image msg;
+  msg.encoding = "invalid";
+
+  testing::internal::CaptureStderr();
+  EXPECT_NO_THROW(ros_image_to_qimage::Convert(msg));
+  std::string output = testing::internal::GetCapturedStderr();
+
+  EXPECT_EQ(
+    output,
+    "ImageView.callback_image() while trying to convert image from 'invalid' to 'rgb8' an "
+    "exception was thrown (Unrecognized image encoding [invalid])\n");
+}
