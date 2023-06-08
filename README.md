@@ -8,7 +8,9 @@ Converts a ROS2 `sensor_msgs/msg/Image` to QImage.
 
 # Installation
 
-### ROS2 Galactic / Humble / Rolling
+### ROS2 Humble / Humble / Rolling
+
+## Binary Installation
 
 Binary installation is available. Source your ROS installation, then run:
 
@@ -16,22 +18,19 @@ Binary installation is available. Source your ROS installation, then run:
 sudo apt install ros-${ROS_DISTRO}-ros-image-to-qimage
 ```
 
+## Source Installation
+
 Alternatively to build from source, source your ROS installation, then run the following in your ROS workspace:
 
 ```
-git clone https://github.com/ros-sports/ros_image_to_qimage.git src/ros_image_to_qimage --branch ${ROS_DISTRO}
+// For ROS 2 Iron / Rolling
+git clone https://github.com/ros-sports/ros_image_to_qimage.git src/ros_image_to_qimage
+colcon build
+
+// For ROS 2 Humble
+git clone https://github.com/ros-sports/ros_image_to_qimage.git src/ros_image_to_qimage --branch humble
 colcon build
 ```
-
-### ROS2 Foxy
-
-Only source installation is available. Source your ROS installation, then run the following in your ROS workspace:
-
-```
-git clone https://github.com/ros-sports/ros_image_to_qimage.git src/ros_image_to_qimage --branch ${ROS_DISTRO}
-colcon build
-```
-
 
 # Usage
 
