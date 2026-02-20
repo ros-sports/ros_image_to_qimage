@@ -18,10 +18,10 @@ add_library(ros_image_to_qimage src/ros_image_to_qimage.cpp)
 target_include_directories(ros_image_to_qimage PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>)
-ament_target_dependencies(ros_image_to_qimage
-  sensor_msgs
+target_link_libraries(ros_image_to_qimage
+  ${sensor_msgs_TARGETS}
   Qt5Widgets
-  cv_bridge)
+  cv_bridge::cv_bridge)
 
 install(
   DIRECTORY include/
@@ -46,6 +46,9 @@ ament_export_dependencies(Qt5Widgets)
 ament_export_dependencies(sensor_msgs)
 ament_export_dependencies(cv_bridge)
 ament_export_dependencies(python_qt_binding)
+
+# Export modern CMake targets
+ament_export_targets(export_${PROJECT_NAME})
 
 if(BUILD_TESTING)
   find_package(ament_cmake_gtest REQUIRED)
